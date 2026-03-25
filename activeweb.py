@@ -1355,6 +1355,7 @@ class StockTracker:
                 total_cost = self.parse_locate_cost(price_text)
                 if total_cost is None or total_cost >= 3:
                     print(f"Cost check failed. Total cost: {total_cost}")
+                    self.send_telegram_notification(f"⚠️ {symbol} - LOCATE4 cost too high: ${total_cost} (limit: $3.00)")
                     return False, None
                 
                 # Accept the locate
@@ -1367,6 +1368,7 @@ class StockTracker:
                 
             except Exception as e:
                 print(f"Error processing LOCATE4: {e}")
+                self.send_telegram_notification(f"⚠️ {symbol} - LOCATE4 error: {str(e)[:100]}")
                 return False, None
             
         except Exception as e:
@@ -1395,7 +1397,7 @@ class StockTracker:
             if shares_available and cost_per_share is not None:
                 total_cost = cost_per_share * quantity
                 
-                if total_cost < 50:
+                if total_cost < 5:
                     # Place locate order
                     locate_qty_xpath = "/html/body/div[3]/div/div/div[3]/form/div[3]/div/div[4]/div/div/div[2]/input[1]"
                     if not self.wait_and_send_keys(By.XPATH, locate_qty_xpath, str(quantity)):
@@ -1415,12 +1417,15 @@ class StockTracker:
                     return True, cost_per_share
                 else:
                     print(f"{route} cost too high: ${total_cost:.2f}")
+                    self.send_telegram_notification(f"⚠️ {symbol} - {route} locate cost too high: ${total_cost:.2f} (limit: $5.00)")
                     return False, None
             else:
+                self.send_telegram_notification(f"⚠️ {symbol} - {route} no shares available")
                 return False, None
             
         except Exception as e:
             print(f"Error trying {route} route: {e}")
+            self.send_telegram_notification(f"⚠️ {symbol} - {route} locate error: {str(e)[:100]}")
             return False, None
 
     def check_locate_message(self):
