@@ -620,7 +620,7 @@ class StockTracker:
                 if not months_ok:
                     conditions.append(months_reason)
                 if not time_ok:
-                    conditions.append("8:30-8:31AM")
+                    conditions.append("8:30-11:31AM")
                     
                 if not conditions:
                     return "✓ All conditions met"
@@ -641,7 +641,7 @@ class StockTracker:
                 if not months_ok:
                     conditions.append(months_reason)
                 if not time_ok:
-                    conditions.append("8:30-8:31AM")
+                    conditions.append("8:30-11:31AM")
                     
                 if not conditions:
                     return "✓ All conditions met"
@@ -660,7 +660,7 @@ class StockTracker:
                 if not months_ok:
                     conditions.append(months_reason)
                 if not time_ok:
-                    conditions.append("8:30-8:31AM")
+                    conditions.append("8:30-11:31AM")
                     
                 if not conditions:
                     return "✓ All conditions met"
@@ -677,9 +677,9 @@ class StockTracker:
         if dt_time(8, 30) <= current_time < dt_time(11, 31):
             # Only send notification if we haven't already notified about this symbol
             if symbol not in self.skipped_symbols_notified:
-                self.send_telegram_notification(f"Skipped {symbol} - No short orders between 8:30-8:31 AM")
+                self.send_telegram_notification(f"Skipped {symbol} - No short orders between 8:30-11:31 AM")
                 self.skipped_symbols_notified.add(symbol)
-            print(f"Skipping {symbol} - No short orders between 8:30-8:31 AM")
+            print(f"Skipping {symbol} - No short orders between 8:30-11:31 AM")
             return False
 
         # Add months data check BEFORE other checks
